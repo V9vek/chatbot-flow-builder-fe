@@ -17,9 +17,9 @@ const CustomHandle = (props: Props) => {
           const outgoing = state.editor.edges.filter(
             (edge): boolean => edge.source === conn.source
           ).length;
-          // allow only one outgoing edge per source (except Condition nodes)
+          // allow only one outgoing edge per source (except Empty nodes)
           const sourceNode = state.editor.elements.find((n): boolean | undefined => n.id === conn.source);
-          if (sourceNode?.type === "Condition") return true;
+          if (sourceNode?.type === "Empty") return true;
           return outgoing === 0;
         }
         // target handles: unlimited incoming edges

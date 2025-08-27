@@ -31,11 +31,11 @@ const initialEditorState: EditorState["editor"] = {
       description: "",
       metadata: {},
       title: "",
-      type: "Trigger",
+      type: "Empty",
     },
     id: "",
     position: { x: 0, y: 0 },
-    type: "Trigger",
+    type: "Empty",
   },
   edges: [],
 };
