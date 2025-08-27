@@ -42,7 +42,7 @@ const WorkflowHeader = () => {
         </button> */}
         <button
           onClick={handlePublish}
-          className="rounded-md border-2 border-green-500 cursor-pointer bg-green-100 px-4 py-[6px] font-semibold text-green-500"
+          className="rounded-md border-2 border-green-500 cursor-pointer bg-green-100 px-4 py-[6px] font-semibold text-green-500 dark:border-green-400 dark:bg-green-900/30 dark:text-green-400"
         >
           Publish
         </button>

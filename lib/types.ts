@@ -15,21 +15,12 @@ export type Connection = {
 export type EditorCanvasTypes =
   | "Email"
   | "WhatsApp"
-  | "Condition"
-  | "AI"
-  | "Slack"
-  | "Google Drive"
-  | "Notion"
-  | "Custom Webhook"
-  | "Google Calendar"
-  | "Trigger"
-  | "Action"
-  | "Wait"
   | "SMS"
   | "Push"
   | "Internal"
   | "Attribute"
-  | "API";
+  | "API"
+  | "Empty";
 
 export type EditorCanvasCardType = {
   title: string;

@@ -9,7 +9,6 @@ import ReactFlow, {
   Controls,
   Edge,
   EdgeChange,
-  Node,
   NodeChange,
   ReactFlowInstance,
   applyNodeChanges,
@@ -21,10 +20,8 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import EditorCanvasCardSingle from "./editor-canvas-card-single";
 import { toast } from "sonner";
-import { usePathname } from "next/navigation";
 import { v4 } from "uuid";
 import { EditorCanvasCardType, EditorNodeType } from "@/lib/types";
-import FlowInstance from "./flow-instance";
 import EditorCanvasSidebar from "./editor-canvas-sidebar";
 import { EditorCanvasDefaultCardTypes } from "@/lib/constants";
 
@@ -33,7 +30,6 @@ const EditorCanvas = () => {
 
   const nodes = state.editor.elements;
   const edges = state.editor.edges;
-  const [isWorkFlowLoading] = useState<boolean>(false);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance>();
 
@@ -44,7 +40,10 @@ const EditorCanvas = () => {
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
-      const updated = applyNodeChanges(changes, nodes) as unknown as EditorNodeType[];
+      const updated = applyNodeChanges(
+        changes,
+        nodes
+      ) as unknown as EditorNodeType[];
       dispatch({ type: "UPDATE_NODE", payload: { elements: updated } });
     },
     [nodes, dispatch]
@@ -82,10 +81,10 @@ const EditorCanvas = () => {
       }
 
       const triggerAlreadyExists = state.editor.elements.find(
-        (node) => node.type === "Trigger"
+        (node) => node.type === "Empty"
       );
 
-      if (type === "Trigger" && triggerAlreadyExists) {
+      if (type === "Empty" && triggerAlreadyExists) {
         toast("Only one trigger can be added to automation at the moment");
         return;
       }
@@ -112,7 +111,9 @@ const EditorCanvas = () => {
       };
       dispatch({
         type: "UPDATE_NODE",
-        payload: { elements: [...nodes, newNode] as unknown as EditorNodeType[] },
+        payload: {
+          elements: [...nodes, newNode] as unknown as EditorNodeType[],
+        },
       });
     },
     [reactFlowInstance, state, nodes, dispatch]
@@ -129,11 +130,11 @@ const EditorCanvas = () => {
             description: "",
             metadata: {},
             title: "",
-            type: "Trigger",
+            type: "Empty",
           },
           id: "",
           position: { x: 0, y: 0 },
-          type: "Trigger",
+          type: "Empty",
         },
       },
     });
@@ -145,18 +146,7 @@ const EditorCanvas = () => {
 
   const nodeTypes = useMemo(
     () => ({
-      Action: EditorCanvasCardSingle,
-      Trigger: EditorCanvasCardSingle,
       Email: EditorCanvasCardSingle,
-      Condition: EditorCanvasCardSingle,
-      AI: EditorCanvasCardSingle,
-      Slack: EditorCanvasCardSingle,
-      "Google Drive": EditorCanvasCardSingle,
-      Notion: EditorCanvasCardSingle,
-      Discord: EditorCanvasCardSingle,
-      "Custom Webhook": EditorCanvasCardSingle,
-      "Google Calendar": EditorCanvasCardSingle,
-      Wait: EditorCanvasCardSingle,
       WhatsApp: EditorCanvasCardSingle,
       SMS: EditorCanvasCardSingle,
       Push: EditorCanvasCardSingle,
@@ -167,47 +157,13 @@ const EditorCanvas = () => {
     []
   );
 
-  // const onGetWorkFlow = async () => {
-  //   setIsWorkFlowLoading(true);
-  //   const response = await onGetNodesEdges(pathname.split("/").pop()!);
-  //   if (response) {
-  //     setEdges(JSON.parse(response.edges!));
-  //     setNodes(JSON.parse(response.nodes!));
-  //     setIsWorkFlowLoading(false);
-  //   }
-  //   setIsWorkFlowLoading(false);
-  // };
-
-  // useEffect(() => {
-  //   onGetWorkFlow();
-  // }, []);
-
   return (
     <div className="flex h-screen">
       <div className="flex-1 flex items-center justify-center">
         <div style={{ width: "100%", height: "100%" }} className="relative">
-          {isWorkFlowLoading ? (
-            <div className="absolute flex h-full w-full items-center justify-center">
-              <svg
-                aria-hidden="true"
-                className="inline h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
-                />
-              </svg>
-            </div>
-          ) : (
+          {
             <ReactFlow
-              className="w-[300px]"
+              className="w-full h-full"
               onDrop={onDrop}
               onDragOver={onDragOver}
               nodes={state.editor.elements}
@@ -216,11 +172,15 @@ const EditorCanvas = () => {
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
               onInit={setReactFlowInstance}
-              fitView
+              defaultViewport={{ x: 0, y: 0, zoom: 1 }}
               onClick={handleClickCanvas}
               nodeTypes={nodeTypes}
               defaultEdgeOptions={{
-                markerEnd: { type: MarkerType.Arrow, width: 30, height: 30 },
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                  width: 30,
+                  height: 30,
+                },
               }}
             >
               <Controls position="top-left" />
@@ -234,37 +194,14 @@ const EditorCanvas = () => {
                 variant={BackgroundVariant.Dots}
                 gap={14}
                 size={1.5}
-                className="bg-gray-50"
+                className="bg-gray-50 dark:bg-black/40"
               />
             </ReactFlow>
-          )}
+          }
         </div>
       </div>
       <div className="w-80 border-l">
-        {isWorkFlowLoading ? (
-          <div className="absolute flex h-full w-full items-center justify-center">
-            <svg
-              aria-hidden="true"
-              className="inline h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
-              viewBox="0 0 100 101"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                fill="currentColor"
-              />
-              <path
-                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                fill="currentFill"
-              />
-            </svg>
-          </div>
-        ) : (
-          <FlowInstance edges={edges} nodes={nodes}>
-            <EditorCanvasSidebar />
-          </FlowInstance>
-        )}
+        <EditorCanvasSidebar />
       </div>
     </div>
   );

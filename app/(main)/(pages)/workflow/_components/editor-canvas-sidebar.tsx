@@ -75,7 +75,7 @@ const EditorCanvasSidebar = () => {
   };
 
   return (
-    <div className="w-80 h-screen overflow-y-auto border-l bg-background p-4">
+    <div className="w-80 h-screen overflow-y-auto border-l bg-background p-4 dark:bg-black dark:border-neutral-700">
       <AnimatePresence mode="wait">
         {mode === "actions" && (
           <motion.div
@@ -85,7 +85,7 @@ const EditorCanvasSidebar = () => {
             exit={{ x: -40, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className="mb-4 text-sm text-gray-600 font-bold uppercase tracking-wide">
+            <h2 className="mb-4 text-sm text-gray-600 dark:text-muted-foreground font-bold uppercase tracking-wide">
               Actions
             </h2>
             <motion.div
@@ -116,7 +116,7 @@ const EditorCanvasSidebar = () => {
                   }`}
                 >
                   {item.icon}
-                  <span className="leading-tight font-semibold text-gray-700">
+                  <span className="leading-tight font-semibold text-gray-700 dark:text-muted-foreground">
                     {item.label}
                   </span>
                 </motion.div>
@@ -143,7 +143,7 @@ const EditorCanvasSidebar = () => {
                     payload: {
                       element: {
                         id: "",
-                        type: "Trigger",
+                        type: "Empty",
                         position: { x: 0, y: 0 },
                         data: {
                           title: "",
@@ -151,7 +151,7 @@ const EditorCanvasSidebar = () => {
                           completed: false,
                           current: false,
                           metadata: {},
-                          type: "Trigger",
+                          type: "Empty",
                         },
                       },
                     },

@@ -18,7 +18,7 @@ const EditorCanvasCardSingle = ({ data }: { data: EditorCanvasCardType }) => {
 
   return (
     <>
-      {data.type !== "Trigger" && data.type !== "Google Drive" && (
+      {data.type !== "Empty" && (
         <CustomHandle
           type="target"
           position={Position.Top}

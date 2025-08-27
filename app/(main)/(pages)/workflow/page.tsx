@@ -1,4 +1,3 @@
-import { ConnectionsProvider } from "@/providers/connections-provider";
 import EditorProvider from "@/providers/editor-provider";
 import React from "react";
 import EditorCanvas from "./_components/editor-canvas";
@@ -9,9 +8,7 @@ const page = () => {
     <div className="h-full">
       <EditorProvider>
         <WorkflowHeader />
-        {/* <ConnectionsProvider> */}
         <EditorCanvas />
-        {/* </ConnectionsProvider> */}
       </EditorProvider>
     </div>
   );

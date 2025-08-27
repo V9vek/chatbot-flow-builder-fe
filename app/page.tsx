@@ -19,7 +19,7 @@ export default function Home() {
                 <div className="flex items-center flex-col">
                   <Link href={"/workflow"}>
                     <Button className="p-8 mb-8 md:mb-4 text-xl w-full sm:w-fit border-t-2 rounded-full border-[#4D4D4D] bg-[#1F1F1F] hover:bg-white group transition-all flex items-center justify-center gap-4 hover:shadow-xl hover:shadow-neutral-500 duration-300 cursor-pointer">
-                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-neutral-500 to-neutral-600 md:text-center font-sans group-hover:bg-gradient-to-r group-hover:from-black group-hover:to-black">
+                      <span className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-neutral-500 to-neutral-600 md:text-center font-sans group-hover:bg-gradient-to-r group-hover:from-black group-hover:to-black">
                         Start For Free Today
                       </span>
                     </Button>
