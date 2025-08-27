@@ -6,7 +6,7 @@ import CustomHandle from "./custom-handle";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import EditorCanvasIconHelper from "./editor-canvas-card-icon-helper";
 import { EditorCanvasCardType } from "@/lib/types";
-import { Copy, Delete, Trash2 } from "lucide-react";
+import { Copy, Trash2 } from "lucide-react";
 
 const EditorCanvasCardSingle = ({ data }: { data: EditorCanvasCardType }) => {
   const { dispatch, state } = useEditor();
@@ -63,7 +63,9 @@ const EditorCanvasCardSingle = ({ data }: { data: EditorCanvasCardType }) => {
             {data.title}
           </CardTitle>
           <CardDescription className="space-y-1 text-xs font-semibold text-gray-500">
-            <p className="text-sm leading-snug break-all whitespace-normal">{data.description}</p>
+            <p className="text-sm leading-snug break-all whitespace-normal">
+              {data.description}
+            </p>
           </CardDescription>
         </div>
       </Card>
