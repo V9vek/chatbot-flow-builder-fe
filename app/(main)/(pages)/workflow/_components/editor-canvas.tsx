@@ -9,6 +9,7 @@ import ReactFlow, {
   Controls,
   Edge,
   EdgeChange,
+  Node,
   NodeChange,
   ReactFlowInstance,
   applyNodeChanges,
@@ -22,22 +23,19 @@ import EditorCanvasCardSingle from "./editor-canvas-card-single";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import { v4 } from "uuid";
-import { EditorCanvasDefaultCardTypes } from "@/lib/constants";
 import { EditorCanvasCardType, EditorNodeType } from "@/lib/types";
 import FlowInstance from "./flow-instance";
 import EditorCanvasSidebar from "./editor-canvas-sidebar";
-
-const initialNodes: EditorNodeType[] = [];
-const initialEdges: { id: string; source: string; target: string }[] = [];
+import { EditorCanvasDefaultCardTypes } from "@/lib/constants";
 
 const EditorCanvas = () => {
   const { dispatch, state } = useEditor();
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
-  const [isWorkFlowLoading, setIsWorkFlowLoading] = useState<boolean>(false);
+
+  const nodes = state.editor.elements;
+  const edges = state.editor.edges;
+  const [isWorkFlowLoading] = useState<boolean>(false);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance>();
-  const pathname = usePathname();
 
   const onDragOver = useCallback((event: any) => {
     event.preventDefault();
@@ -46,20 +44,28 @@ const EditorCanvas = () => {
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
-      setNodes((nds) => applyNodeChanges(changes, nds));
+      const updated = applyNodeChanges(changes, nodes) as unknown as EditorNodeType[];
+      dispatch({ type: "UPDATE_NODE", payload: { elements: updated } });
     },
-    [setNodes]
+    [nodes, dispatch]
   );
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) =>
-      setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges]
+      dispatch({
+        type: "UPDATE_EDGE",
+        payload: { edges: applyEdgeChanges(changes, edges) },
+      }),
+    [edges, dispatch]
   );
 
   const onConnect = useCallback(
-    (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
-    []
+    (params: Edge | Connection) =>
+      dispatch({
+        type: "UPDATE_EDGE",
+        payload: { edges: addEdge(params, edges) },
+      }),
+    [edges, dispatch]
   );
 
   const onDrop = useCallback(
@@ -104,9 +110,12 @@ const EditorCanvas = () => {
           color: `hsl(${Math.floor(Math.random() * 360)} 70% 70%)`,
         },
       };
-      setNodes((nds) => nds.concat(newNode));
+      dispatch({
+        type: "UPDATE_NODE",
+        payload: { elements: [...nodes, newNode] as unknown as EditorNodeType[] },
+      });
     },
-    [reactFlowInstance, state]
+    [reactFlowInstance, state, nodes, dispatch]
   );
 
   const handleClickCanvas = () => {
@@ -132,7 +141,7 @@ const EditorCanvas = () => {
 
   useEffect(() => {
     dispatch({ type: "LOAD_DATA", payload: { edges, elements: nodes } });
-  }, [nodes, edges]);
+  }, [nodes, edges, dispatch]);
 
   const nodeTypes = useMemo(
     () => ({
@@ -253,7 +262,7 @@ const EditorCanvas = () => {
           </div>
         ) : (
           <FlowInstance edges={edges} nodes={nodes}>
-            <EditorCanvasSidebar nodes={nodes} />
+            <EditorCanvasSidebar />
           </FlowInstance>
         )}
       </div>

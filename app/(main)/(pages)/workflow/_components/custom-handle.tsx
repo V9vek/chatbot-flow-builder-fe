@@ -1,39 +1,32 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEditor } from "@/providers/editor-provider";
 import React, { CSSProperties } from "react";
-import { Handle, HandleProps, useStore } from "reactflow";
+import { Handle, HandleProps } from "reactflow";
+import { useEditor } from "@/providers/editor-provider";
 
 type Props = HandleProps & { style?: CSSProperties };
-
-const selector = (s: any) => ({
-  nodeInternals: s.nodeInternals,
-  edges: s.edges,
-});
 
 const CustomHandle = (props: Props) => {
   const { state } = useEditor();
 
+  const isSource = props.type === "source";
+
   return (
     <Handle
       {...props}
-      isValidConnection={(e) => {
-        const sourcesFromHandleInState = state.editor.edges.filter(
-          (edge) => edge.source === e.source
-        ).length;
-        const sourceNode = state.editor.elements.find(
-          (node) => node.id === e.source
-        );
-        //target
-        const targetFromHandleInState = state.editor.edges.filter(
-          (edge) => edge.target === e.target
-        ).length;
-
-        if (targetFromHandleInState === 1) return false;
-        if (sourceNode?.type === "Condition") return true;
-        if (sourcesFromHandleInState < 1) return true;
-        return false;
+      isValidConnection={(conn) => {
+        if (isSource) {
+          const outgoing = state.editor.edges.filter(
+            (edge): boolean => edge.source === conn.source
+          ).length;
+          // allow only one outgoing edge per source (except Condition nodes)
+          const sourceNode = state.editor.elements.find((n): boolean | undefined => n.id === conn.source);
+          if (sourceNode?.type === "Condition") return true;
+          return outgoing === 0;
+        }
+        // target handles: unlimited incoming edges
+        return true;
       }}
-      className="!h-2 !w-2 !bg-gray-400 dark:bg-red-800"
+      className={`${isSource ? "!bg-emerald-500" : "!bg-blue-500"} !h-3 !w-3 border-2 border-white dark:border-neutral-900`}
+      style={{ zIndex: 10, borderRadius: "9999px", ...(props.style || {}) }}
     />
   );
 };

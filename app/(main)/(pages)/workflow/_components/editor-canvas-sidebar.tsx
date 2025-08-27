@@ -2,7 +2,7 @@
 import { EditorCanvasTypes } from "@/lib/types";
 import { useEditor } from "@/providers/editor-provider";
 
-import React from "react";
+import React, { useState } from "react";
 import { onDragStart } from "@/lib/editor-utils";
 import {
   Mail,
@@ -49,12 +49,14 @@ const ACTION_ITEMS: {
 const EditorCanvasSidebar = () => {
   const { state, dispatch } = useEditor();
 
-  const [mode, setMode] = React.useState<Mode>("actions");
+  const [mode, setMode] = useState<Mode>("actions");
 
   // switch to settings when node selected
   React.useEffect(() => {
     if (state.editor.selectedNode.id) {
       setMode("settings");
+    } else {
+      setMode("actions");
     }
   }, [state.editor.selectedNode.id]);
 
@@ -62,6 +64,7 @@ const EditorCanvasSidebar = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newDesc = e.target.value;
+    
     const updatedElements = state.editor.elements.map((el) =>
       el.id === state.editor.selectedNode.id
         ? { ...el, data: { ...el.data, description: newDesc } }
@@ -111,7 +114,7 @@ const EditorCanvasSidebar = () => {
             >
               <ArrowLeft size={16} />
             </button>
-            <h2 className="text-sm font-semibold uppercase text-muted-foreground">
+            <h2 className="text-sm font-semibold text-muted-foreground">
               {state.editor.selectedNode.data.title}
             </h2>
           </div>

@@ -37,7 +37,7 @@ const EditorCanvasCardSingle = ({ data }: { data: EditorCanvasCardType }) => {
               },
             });
         }}
-        className="relative max-w-[280px] items-center gap-4 rounded-md border bg-background p-4 shadow-sm dark:bg-neutral-900/90"
+        className="relative min-w-[280px] max-w-[400px] items-center gap-4 rounded-md border bg-background p-4 shadow-sm dark:bg-neutral-900/90"
       >
         {/* Icon column */}
         <div
@@ -63,7 +63,7 @@ const EditorCanvasCardSingle = ({ data }: { data: EditorCanvasCardType }) => {
             {data.title}
           </CardTitle>
           <CardDescription className="space-y-1 text-xs font-semibold text-gray-500">
-            <p className="text-sm leading-snug">{data.description}</p>
+            <p className="text-sm leading-snug break-all whitespace-normal">{data.description}</p>
           </CardDescription>
         </div>
       </Card>

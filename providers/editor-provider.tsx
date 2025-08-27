@@ -96,20 +96,34 @@ const editorReducer = (
           edges: action.payload.edges,
         },
       };
-    case "SELECTED_ELEMENT":
-      return {
-        ...state,
-        editor: {
-          ...state.editor,
-          selectedNode: action.payload.element,
-        },
-      };
     case "UPDATE_NODE":
       return {
         ...state,
         editor: {
           ...state.editor,
           elements: action.payload.elements,
+          selectedNode:
+            state.editor.selectedNode.id === ""
+              ? state.editor.selectedNode
+              : action.payload.elements.find(
+                  (el) => el.id === state.editor.selectedNode.id
+                ) ?? state.editor.selectedNode,
+        },
+      };
+    case "UPDATE_EDGE":
+      return {
+        ...state,
+        editor: {
+          ...state.editor,
+          edges: action.payload.edges,
+        },
+      };
+    case "SELECTED_ELEMENT":
+      return {
+        ...state,
+        editor: {
+          ...state.editor,
+          selectedNode: action.payload.element,
         },
       };
     default:

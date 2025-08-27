@@ -71,6 +71,16 @@ export type EditorActions =
         elements: EditorNode[];
       };
     }
+  | {
+      type: "UPDATE_EDGE";
+      payload: {
+        edges: {
+          id: string;
+          source: string;
+          target: string;
+        }[];
+      };
+    }
   | { type: "REDO" }
   | { type: "UNDO" }
   | {
