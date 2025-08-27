@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
 
-First, run the development server:
+# Chatbot Flow Builder
+
+A full-stack **Next.js 14** application for visually designing multi-step automation journeys (email, WhatsApp, SMS, …) using an interactive drag-and-drop canvas powered by **React-Flow**.
+
+![Flow Builder banner](public/temp-banner2.png)
+
+---
+
+## ✨ Features
+
+• **Drag-and-drop canvas** – add nodes (Email, WhatsApp, Condition, Wait, API, …) from the sidebar and connect them with smart handles.  
+• **Single-source React-Flow state** – nodes/edges stored in global context, no duplicate local state.  
+• **Custom node cards** – coloured icon, title, editable description, realtime status dot.  
+• **Smart handles** – only one outgoing edge per source; unlimited incoming on targets; colour-coded.  
+• **Resizable / animated sidebar** – Framer-Motion slides between _Actions_ grid and _Node Settings_ panel with staggered pop-in tiles.  
+• **Dark / light theme** – Tailwind + shadcn palette, adaptive backgrounds and gradients.  
+• **Publish validation** – warns if multiple dangling start/end nodes; toast feedback via Sonner.  
+• **Header & Navbar** – blurred translucent bars, theme-aware gradients, fixed positioning.  
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install # or npm / yarn
+pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🗺️ Folder Structure
 
-## Learn More
+```
+app/
+  layout.tsx          – Global theme + toast provider
+  page.tsx            – Landing page w/ radial gradient
+  (main)/pages/
+    workflow/         – Flow builder route
+      _components/    – Canvas, sidebar, custom nodes, header …
+components/
+  global/             – Navbar component
+  ui/                 – shadcn-ui primitives
+lib/                  – types, constants, helpers
+providers/            – Editor & Connections context
+public/               – Static assets (banner2.png, icons …)
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔑 Key Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| command            | description                       |
+|--------------------|-----------------------------------|
+| `pnpm run dev`     | start dev server                  |
+| `pnpm run lint`    | eslint + unused-imports cleanup   |
+| `pnpm run build`   | next build                        |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📸 Screenshots
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Light | Dark |
+|-------|------|
+| ![](public/temp-banner2.png) | ![](public/temp-banner2.png) |
+
+---
+
+## 📝 License
+
+MIT © 2024
